@@ -1,0 +1,117 @@
+/**
+ * 在项目根路径下创建一个文件key.properties
+ */
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+//创建一个properties对象
+def keystoreProperties = new Properties()
+//加载key.properties里面的内容
+keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+android {
+
+    signingConfigs {
+
+        color {
+            storeFile file(keystoreProperties['storeFile']) //签名文件
+            storePassword keystoreProperties['storePassword']  //签名文件密码
+            keyAlias keystoreProperties['keyAlias']       //签名文件别名
+            keyPassword keystoreProperties['keyPassword']     //别名密码
+        }
+
+        jakj {
+            storeFile file(keystoreProperties['storeFile']) //签名文件
+            storePassword keystoreProperties['storePassword']  //签名文件密码
+            keyAlias keystoreProperties['keyAlias']       //签名文件别名
+            keyPassword keystoreProperties['keyPassword']     //别名密码
+        }
+
+    }
+
+    buildTypes {
+
+        debug {
+            //脚本构建时网址进行切换
+            buildConfigField('String', 'BASE_URL', '"http://qingchenglive.com/picture-edit/"')
+
+            zipAlignEnabled false //Zipalign优化
+            shrinkResources false // 移除无用的resource文件
+            minifyEnabled false //是否开启混淆
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.color//在此调用签名方法
+        }
+
+        release {
+            //脚本构建时网址进行切换
+            buildConfigField('String', 'BASE_URL', '"http://qingchenglive.com/picture-edit/"')
+
+            zipAlignEnabled true //Zipalign优化
+            shrinkResources true // 移除无用的resource文件
+            minifyEnabled true //是否开启混淆
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.jakj//在此调用签名方法
+        }
+    }
+
+    flavorDimensions "version"
+
+    productFlavors {
+        d_update {
+            dimension = "version"
+            manifestPlaceholders = ["APP_NAME": "工具箱"]
+        }
+        d_oppo {
+            dimension = "version"
+        }
+        d_vivo {
+            dimension = "version"
+        }
+        d_xiaomi {
+            dimension = "version"
+        }
+        d_huawei {
+            dimension = "version"
+        }
+        d_yingyongbao {
+            dimension = "version"
+        }
+        d_pp {
+            dimension = "version"
+        }
+        productFlavors.all {
+            flavor ->
+                flavor.applicationId = "com.dragon.toolbox"
+                flavor.manifestPlaceholders.put("CHANNEL", name)//设置渠道号
+                flavor.manifestPlaceholders.put("APPLICATION_ID", flavor.applicationId)//替换manifest里需要使用appid部分
+                if (flavor.manifestPlaceholders.get("APP_NAME") == null) {
+                    flavor.manifestPlaceholders.put("APP_NAME", getDefaultAppName())
+                }
+        }
+    }
+
+    applicationVariants.all { variant ->
+        //设置输出路径
+        if ("release".equals(variant.buildType.name)) {
+            variant.packageApplicationProvider.get().outputDirectory = rootProject.file("/apks/${variant.versionName}")
+        }
+        //设置包名
+        def buildType = variant.buildType.name
+        //android studio3.0之后命名
+        variant.outputs.all {
+            outputFileName = "toolbox_${variant.flavorName}_v${defaultConfig.versionName}_${releaseTime()}_${buildType}.apk"
+        }
+    }
+
+}
+
+//发布时间
+def releaseTime() {
+    //设置发布时间的时候不要设置小时，这样的话每个小时生成的包都不一样，在安装时studio会报找不见apk的异常
+    //return new Date().format('MMddHH', TimeZone.getTimeZone('GMT+8'))
+    return new Date().format('MMdd', TimeZone.getTimeZone('GMT+8'))
+}
+
+def getDefaultAppName() {
+    return "工具箱"
+}
+
+

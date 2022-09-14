@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.dragon.download">
+
+    <application>
+        <provider
+            android:name=".utils.DownloadProvider"
+            android:authorities="com.dragon.download.provider"
+            android:enabled="true"
+            android:exported="true">
+
+        </provider>
+        <receiver android:name=".listener.NotificationListener$DownloadBroadcast" android:exported="false">
+            <intent-filter>
+                <action android:name="dragon_download_pause"/>
+                <action android:name="dragon_download_resume"/>
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

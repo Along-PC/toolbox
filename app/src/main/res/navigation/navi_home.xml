@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navi_home"
+    app:startDestination="@id/fragment_home">
+
+    <fragment
+        android:id="@+id/fragment_home"
+        android:name="com.dragon.toolbox.navagation.HomeFragment"
+        android:label="首页"
+        tools:layout="@layout/fragment_home">
+
+        <action
+            android:id="@+id/action_home_to_hot"
+            app:destination="@+id/fragment_hot"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_hot"
+        android:name="com.dragon.toolbox.navagation.HotFragment"
+        android:label="热门"
+        tools:layout="@layout/fragment_hot">
+
+        <action
+            android:id="@+id/action_hot_to_info"
+            app:destination="@+id/fragment_info"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/fragment_info"
+        android:name="com.dragon.toolbox.navagation.InfoFragment"
+        android:label="信息详情"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"
+        tools:layout="@layout/fragment_info">
+
+    </fragment>
+
+</navigation>
