@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.dragon.toolbox.scroll.ScrollActivity
-import com.jakj.downloader.DownloadManager
 
 class RouterActivity : AppCompatActivity() {
 
